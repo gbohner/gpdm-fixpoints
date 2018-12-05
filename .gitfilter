@@ -1,0 +1,12 @@
+# Add this filter to the bottom of .git/config
+# Credit to: http://timstaley.co.uk/posts/making-git-and-jupyter-notebooks-play-nice/
+
+[filter "nbstrip_full"]
+clean = "jq --indent 1 \
+        '(.cells[] | select(has(\"outputs\")) | .outputs) = []  \
+        | (.cells[] | select(has(\"execution_count\")) | .execution_count) = nul$
+        | .metadata = {\"language_info\": {\"name\": \"python\", \"pygments_lexe$
+        | .cells[].metadata = {} \
+        '"
+smudge = cat
+required = true
